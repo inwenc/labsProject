@@ -2,3 +2,4 @@ project-api/node_modules
 
 project-ui/node_modules
 project-ui/.env
+.env
