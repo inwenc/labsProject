@@ -1,25 +1,3 @@
-// import React, { useEffect, useState } from 'react';
-// import './App.css';
-// import Map from './Map';
-// import { loadMapApi } from './utils/googleMapUtils'
-
-// function App() {
-//   const [scriptLoaded, setScriptLoaded] = useState(false);
-//   useEffect( () => {
-//     const googleMapScript = loadMapApi();
-//     googleMapScript.addEventListener('load', () => {
-//       setScriptLoaded(true)
-//     })
-//   }, [])
-//   return (
-//     <div className="App">
-//       {scriptLoaded && (<Map mapType={google.maps.MapTypeId.ROADMAP} mapTypeControl={true}/>)}
-//  {/* <Map mapType={google.maps.MapTypeId.ROADMAP} mapTypeControl={true}/> */}
-//     </div>
-//   );
-// }
-
-// export default App;
 
 import * as React from "react";
 import * as ReactDom from "react-dom";
