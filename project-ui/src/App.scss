@@ -1,0 +1,33 @@
+.map-container {
+  width: 100%;
+  padding-bottom: 41.6%;
+  display: flex;
+  align-items: center;
+
+  &__map {
+    width: 55%;
+    height: 80%;
+    left: 0;
+    top: 0;
+    position: fixed !important;
+  }
+  &__form {
+    padding-left: 950px;
+  }
+}
+
+label,
+h3 {
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: large;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 0.25rem;
+  box-sizing: border-box;
+  font-size: larger;
+}
