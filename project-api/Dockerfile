@@ -1,6 +1,6 @@
 
    
-FROM balenalib/raspberrypi3-64-alpine-node
+FROM balenalib/raspberrypi3-node:10.18
 
 WORKDIR /usr/src/app
 COPY package.json package-lock.json ./

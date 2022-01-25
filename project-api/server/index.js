@@ -1,11 +1,16 @@
-const express = require('express')
-const app = express()
-const port = process.env.PORT || 3001
+const express = require('express');
+const app = express();
+const cors = require('cors');
+const db = require('../db/conn');
+const port = process.env.PORT || 3001;
 
 app.get('/', (req, res) => {
-  res.json({ message: "Hello from server!" });
-})
+  res.json({ message: 'Hello from server!' });
+});
 
-app.listen(port, () => {
-  console.log(`labs app listening on port ${port}`)
-})
+
+  // start the Express server
+  app.listen(port, () => {
+    console.log(`Server is running on port: ${port}`);
+  });
+
