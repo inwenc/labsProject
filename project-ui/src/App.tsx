@@ -17,15 +17,31 @@ const App: React.VFC = () => {
     lat: 0,
     lng: 0,
   });
+  const [checkpoints, setCheckpoints] = React.useState<string[]>([])
 
   const onClick = (e: google.maps.MapMouseEvent) => {
     // avoid directly mutating state
     setClicks([...clicks, e.latLng!]);
-    console.log(e.latLng)
+    // const allCheckpoints = clicks.map((latLng) => (
+    //    JSON.stringify(latLng.toJSON(), null, 2)
+    //   ))
+    //   setCheckpoints(allCheckpoints);
+    //   console.log('allCheckpoints', checkpoints)
+    //   console.log(clicks.length)
+
+
   };
 
+  const addCheckpoints = () => {
+   const allCheckpoints = clicks.map((latLng) => (
+       JSON.stringify(latLng.toJSON(), null, 2)
+      ))
+      setCheckpoints(allCheckpoints);
+      console.log('allCheckpoints', allCheckpoints)
+      console.log(clicks.length)
+  }
+
   const onIdle = (m: google.maps.Map) => {
-    console.log("onIdle");
     setZoom(m.getZoom()!);
     setCenter(m.getCenter()!.toJSON());
   };
@@ -67,7 +83,9 @@ const App: React.VFC = () => {
       <h3>{clicks.length === 0 ? "Click on map to add checkpoints" : "Checkpoints"}</h3>
       {clicks.map((latLng, i) => (
         <pre key={i}>{JSON.stringify(latLng.toJSON(), null, 2)}</pre>
-      ))}
+
+      ))
+      }
       <button onClick={() => setClicks([])}>Clear</button>
     </div>
   );
@@ -92,6 +110,8 @@ const App: React.VFC = () => {
       </Wrapper>
       {/* Basic form for controlling center and zoom of map. */}
       {form}
+   
+      <button onClick={() => addCheckpoints()}>BOTON SUBMIT</button>
     </div>
   );
 };
@@ -117,8 +137,6 @@ const Map: React.FC<MapProps> = ({
     }
   }, [ref, map]);
 
-  // because React does not do deep comparisons, a custom hook is used
-  // see discussion in https://github.com/googlemaps/js-samples/issues/946
   useDeepCompareEffectForMaps(() => {
     if (map) {
       map.setOptions(options);
