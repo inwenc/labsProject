@@ -20,26 +20,72 @@ const App: React.VFC = () => {
   const [checkpoints, setCheckpoints] = React.useState<string[]>([])
 
   const onClick = (e: google.maps.MapMouseEvent) => {
-    // avoid directly mutating state
     setClicks([...clicks, e.latLng!]);
-    // const allCheckpoints = clicks.map((latLng) => (
-    //    JSON.stringify(latLng.toJSON(), null, 2)
-    //   ))
-    //   setCheckpoints(allCheckpoints);
-    //   console.log('allCheckpoints', checkpoints)
-    //   console.log(clicks.length)
-
 
   };
 
-  const addCheckpoints = () => {
+  const submitCheckpoints = () => {
    const allCheckpoints = clicks.map((latLng) => (
-       JSON.stringify(latLng.toJSON(), null, 2)
+       JSON.stringify(latLng.toJSON(), null, 1)
       ))
       setCheckpoints(allCheckpoints);
-      console.log('allCheckpoints', allCheckpoints)
-      console.log(clicks.length)
+//   const requestOptions = {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify(allCheckpoints)
+//     };
+//  fetch('http//localhost:3001/postCheckpoints', requestOptions) 
+//  .then((res) => {
+//         if (!res.ok) {
+//           throw new Error("something went wrong");
+//         }
+//         return res.json();
+//       })
+//       .then((parsedData) => {
+//         console.log('parsed', parsedData)
+       
+//       })
+//       .catch((err) => console.log(err));
+  fetch('http://localhost:3001/postCheckpoints', {
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *cors, same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(allCheckpoints)
+  })
+   .then((res) => {
+        if (!res.ok) {
+          throw new Error("something went wrong");
+        }
+        return res.json();
+      })
+      .then((parsedData) => {
+        console.log('parsed', parsedData)
+       
+      })
+      .catch((err) => console.log(err));
+
   }
+
+//   async function postData(url = '', data = {}) {
+//   // Default options are marked with *
+//   const response = await fetch(url, {
+//     method: 'POST', // *GET, POST, PUT, DELETE, etc.
+//     mode: 'cors', // no-cors, *cors, same-origin
+//     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+//     credentials: 'same-origin', // include, *same-origin, omit
+//     headers: {
+//       'Content-Type': 'application/json'
+//       // 'Content-Type': 'application/x-www-form-urlencoded',
+//     },
+//     redirect: 'follow', // manual, *follow, error
+//     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+//     body: JSON.stringify(data) // body data type must match "Content-Type" header
+//   });
+//   return response.json(); // parses JSON response into native JavaScript objects
+// }
 
   const onIdle = (m: google.maps.Map) => {
     setZoom(m.getZoom()!);
@@ -111,7 +157,7 @@ const App: React.VFC = () => {
       {/* Basic form for controlling center and zoom of map. */}
       {form}
    
-      <button onClick={() => addCheckpoints()}>BOTON SUBMIT</button>
+      <button onClick={() => submitCheckpoints()}>BOTON SUBMIT</button>
     </div>
   );
 };
