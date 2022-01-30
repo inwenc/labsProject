@@ -10,6 +10,7 @@ COPY package.json package-lock.json ./
 RUN npm i
 
 # build app
+COPY ./tsconfig.json ./tsconfig.json
 COPY ./src ./src
 COPY ./public ./public
 RUN npm run build
