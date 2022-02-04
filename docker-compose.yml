@@ -20,10 +20,12 @@ services:
       - internal
     restart: unless-stopped
   mongo:
-    image: arm64v8/mongo:4.2
+    image: arm7/mongo
     restart: always
     volumes:
       - 'mongo-data:/data/db'
+    expose:
+      - "27017"
     ports:
       - "27017:27017"
     networks:
