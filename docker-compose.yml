@@ -19,6 +19,18 @@ services:
     networks:
       - internal
     restart: unless-stopped
+  mongo:
+    image: arm64v8/mongo:4.2
+    restart: always
+    volumes:
+      - 'mongo-data:/data/db'
+    ports:
+      - "27017:27017"
+    networks:
+      - internal
+
+volumes:
+  mongo-data:
 
 networks:
   internal: {}
