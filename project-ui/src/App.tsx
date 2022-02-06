@@ -1,10 +1,9 @@
-
 import * as React from "react";
 import * as ReactDom from "react-dom";
 import { Wrapper, Status } from "@googlemaps/react-wrapper";
 import { createCustomEqual } from "fast-equals";
 import { isLatLngLiteral } from "@googlemaps/typescript-guards";
-import './App.scss'
+import "./App.scss";
 
 const render = (status: Status) => {
   return <h1>{status}</h1>;
@@ -17,75 +16,54 @@ const App: React.VFC = () => {
     lat: 0,
     lng: 0,
   });
-  const [checkpoints, setCheckpoints] = React.useState<string[]>([])
+  const [checkpoints, setCheckpoints] = React.useState<string[]>([]);
 
   const onClick = (e: google.maps.MapMouseEvent) => {
     setClicks([...clicks, e.latLng!]);
-
   };
 
   const submitCheckpoints = () => {
-   const allCheckpoints = clicks.map((latLng) => (
-       JSON.stringify(latLng.toJSON(), null, 1)
-      ))
-      setCheckpoints(allCheckpoints);
-//   const requestOptions = {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify(allCheckpoints)
-//     };
-//  fetch('http//localhost:3001/postCheckpoints', requestOptions) 
-//  .then((res) => {
-//         if (!res.ok) {
-//           throw new Error("something went wrong");
-//         }
-//         return res.json();
-//       })
-//       .then((parsedData) => {
-//         console.log('parsed', parsedData)
-       
-//       })
-//       .catch((err) => console.log(err));
-  fetch('http://localhost:3001/postCheckpoints', {
-    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-    mode: 'cors', // no-cors, *cors, same-origin
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(allCheckpoints)
-  })
-   .then((res) => {
+    const allCheckpoints = clicks.map((latLng) =>
+      JSON.stringify(latLng.toJSON(), null, 1)
+    );
+    setCheckpoints(allCheckpoints);
+    //   const requestOptions = {
+    //         method: 'POST',
+    //         headers: { 'Content-Type': 'application/json' },
+    //         body: JSON.stringify(allCheckpoints)
+    //     };
+    //  fetch('http//localhost:3001/postCheckpoints', requestOptions)
+    //  .then((res) => {
+    //         if (!res.ok) {
+    //           throw new Error("something went wrong");
+    //         }
+    //         return res.json();
+    //       })
+    //       .then((parsedData) => {
+    //         console.log('parsed', parsedData)
+
+    //       })
+    //       .catch((err) => console.log(err));
+    fetch("http://localhost:3001/postCheckpoints", {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(allCheckpoints),
+    })
+      .then((res) => {
         if (!res.ok) {
           throw new Error("something went wrong");
         }
         return res.json();
       })
       .then((parsedData) => {
-        console.log('parsed', parsedData)
-       
+        console.log("parsed", parsedData);
       })
       .catch((err) => console.log(err));
-
-  }
-
-//   async function postData(url = '', data = {}) {
-//   // Default options are marked with *
-//   const response = await fetch(url, {
-//     method: 'POST', // *GET, POST, PUT, DELETE, etc.
-//     mode: 'cors', // no-cors, *cors, same-origin
-//     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-//     credentials: 'same-origin', // include, *same-origin, omit
-//     headers: {
-//       'Content-Type': 'application/json'
-//       // 'Content-Type': 'application/x-www-form-urlencoded',
-//     },
-//     redirect: 'follow', // manual, *follow, error
-//     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-//     body: JSON.stringify(data) // body data type must match "Content-Type" header
-//   });
-//   return response.json(); // parses JSON response into native JavaScript objects
-// }
+  };
 
   const onIdle = (m: google.maps.Map) => {
     setZoom(m.getZoom()!);
@@ -93,9 +71,7 @@ const App: React.VFC = () => {
   };
 
   const form = (
-    <div
-   className="map-container__form"
-    >
+    <div className="map-container__form">
       <label htmlFor="zoom">Zoom</label>
       <input
         type="number"
@@ -126,38 +102,43 @@ const App: React.VFC = () => {
           setCenter({ ...center, lng: Number(event.target.value) })
         }
       />
-      <h3>{clicks.length === 0 ? "Click on map to add checkpoints" : "Checkpoints"}</h3>
+      <h3>
+        {clicks.length === 0
+          ? "Click on map to add checkpoints"
+          : "Checkpoints"}
+      </h3>
       {clicks.map((latLng, i) => (
         <pre key={i}>{JSON.stringify(latLng.toJSON(), null, 2)}</pre>
-
-      ))
-      }
+      ))}
       <button onClick={() => setClicks([])}>Clear</button>
+      <button className="submit-button" onClick={() => submitCheckpoints()}>
+        SUBMIT
+      </button>
     </div>
   );
 
   return (
     <div className="map-container">
-      <Wrapper apiKey={`${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`
-} render={render}>
-  <div className="map-container__map">
-        <Map
-          center={{ lat: 9.9281, lng: -84.0907 }}
-          onClick={onClick}
-          onIdle={onIdle}
-          zoom={zoom}
-          style={{ flexGrow: "1", height: "100%" }}
-        >
-          {clicks.map((latLng, i) => (
-            <Marker key={i} position={latLng} />
-          ))}
-        </Map>
+      <Wrapper
+        apiKey={`${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`}
+        render={render}
+      >
+        <div className="map-container__map">
+          <Map
+            center={{ lat: 9.9281, lng: -84.0907 }}
+            onClick={onClick}
+            onIdle={onIdle}
+            zoom={zoom}
+            style={{ flexGrow: "1", height: "100%" }}
+          >
+            {clicks.map((latLng, i) => (
+              <Marker key={i} position={latLng} />
+            ))}
+          </Map>
         </div>
       </Wrapper>
       {/* Basic form for controlling center and zoom of map. */}
       {form}
-   
-      <button onClick={() => submitCheckpoints()}>BOTON SUBMIT</button>
     </div>
   );
 };

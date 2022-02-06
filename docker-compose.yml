@@ -1,7 +1,19 @@
-version: "2.1"
+version: "2"
+
+volumes:
+  mongo-data:
 
 services:
+  mongo:
+    image: arm7/mongo
+    restart: always
+    volumes:
+      - "mongo-data:/data/db"
+    expose:
+      - "27017"
   frontend:
+    depends_on:
+      - mongo
     build:
       context: ./project-ui
       dockerfile: ./Dockerfile.template
@@ -11,6 +23,8 @@ services:
       - internal
     restart: unless-stopped
   backend:
+    depends_on:
+      - mongo
     build:
       context: ./project-api
       dockerfile: ./Dockerfile.template
@@ -19,18 +33,6 @@ services:
     networks:
       - internal
     restart: unless-stopped
-  mongo:
-    image: arm64v8/mongo:4.2
-    restart: always
-    volumes:
-      - 'mongo-data:/data/db'
-    ports:
-      - "27017:27017"
-    networks:
-      - internal
-
-volumes:
-  mongo-data:
 
 networks:
   internal: {}
