@@ -1,0 +1,17 @@
+FROM balenalib/%%BALENA_MACHINE_NAME%%-python:3.9-run
+
+RUN install_packages -y --no-install-recommends \
+    # Runtime dependencies
+    gpsd \
+    gpsd-clients \
+    dbus
+
+RUN pip3 install gpsdclient paho-mqtt
+
+WORKDIR /usr/src/app
+
+COPY *.py ./
+
+COPY *.sh ./
+
+CMD ["bash", "start.sh"]

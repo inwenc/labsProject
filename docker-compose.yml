@@ -28,9 +28,22 @@ services:
       - "27017:27017"
     networks:
       - internal
-
+  gps:
+    privileged: true
+    build: "./gps"
+    devices:
+      - "/dev/ttyACM0:/dev/ttyACM0"
+    networks:
+      - internal
+  gps-controller:
+    privileged: true
+    build: "./gps-controller"
+    restart: always
+    networks:
+      - internal
 volumes:
   mongo-data:
+  gps-data:
 
 networks:
   internal: {}

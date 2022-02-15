@@ -27,23 +27,7 @@ const App: React.VFC = () => {
       JSON.stringify(latLng.toJSON(), null, 1)
     );
     setCheckpoints(allCheckpoints);
-    //   const requestOptions = {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify(allCheckpoints)
-    //     };
-    //  fetch('http//localhost:3001/postCheckpoints', requestOptions)
-    //  .then((res) => {
-    //         if (!res.ok) {
-    //           throw new Error("something went wrong");
-    //         }
-    //         return res.json();
-    //       })
-    //       .then((parsedData) => {
-    //         console.log('parsed', parsedData)
 
-    //       })
-    //       .catch((err) => console.log(err));
     fetch("http://localhost:3001/postCheckpoints", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
@@ -52,6 +36,27 @@ const App: React.VFC = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(allCheckpoints),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("something went wrong");
+        }
+        return res.json();
+      })
+      .then((parsedData) => {
+        console.log("parsed", parsedData);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const getMetrics: any = () => {
+    fetch("http://localhost:3001/getCheckpoints", {
+      method: "GET", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
       .then((res) => {
         if (!res.ok) {
@@ -114,6 +119,7 @@ const App: React.VFC = () => {
       <button className="submit-button" onClick={() => submitCheckpoints()}>
         SUBMIT
       </button>
+      <button onClick={() => getMetrics()}>Get Metrics</button>
     </div>
   );
 
@@ -125,7 +131,7 @@ const App: React.VFC = () => {
       >
         <div className="map-container__map">
           <Map
-            center={{ lat: 9.9281, lng: -84.0907 }}
+            center={{ lat: 9.9334811, lng: -84.1334356 }}
             onClick={onClick}
             onIdle={onIdle}
             zoom={zoom}
