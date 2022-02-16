@@ -19,6 +19,8 @@ services:
     networks:
       - internal
     restart: unless-stopped
+    volumes:
+      - "gps-data:/data/gps_data"
   mongo:
     image: arm7/mongo
     restart: always
@@ -41,6 +43,8 @@ services:
     restart: always
     networks:
       - internal
+    volumes:
+      - "gps-data:/data/gps_data"
 volumes:
   mongo-data:
   gps-data:

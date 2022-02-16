@@ -18,6 +18,7 @@ app.get("/", (req, res) => {
 app.post("/postCheckpoints", async (req, res) => {
   let dataSet = req.body;
 
+  console.log("dataSet", dataSet);
   const checkpoints = new Checkpoints({
     checkpoints: dataSet,
   });
@@ -27,6 +28,11 @@ app.post("/postCheckpoints", async (req, res) => {
   });
 
   res.json("received");
+});
+
+app.get("/getCheckpoints", async (req, res) => {
+  const results = await Checkpoints.find({});
+  res.json(results);
 });
 
 mongoose.connection.once("open", () => {
