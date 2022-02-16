@@ -2,9 +2,12 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const { db, Checkpoints } = require("../db/conn");
+const { loadGpsCoordinates } = require("./utils");
 const mongoose = require("mongoose");
 const PORT = process.env.PORT || 3001;
 const bodyParser = require("body-parser");
+// const { readFile } = require("fs").promises;
+// const path = require("path");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
@@ -31,6 +34,8 @@ app.post("/postCheckpoints", async (req, res) => {
 });
 
 app.get("/getCheckpoints", async (req, res) => {
+  const data = await loadGpsCoordinates();
+  console.log("data", data);
   const results = await Checkpoints.find({});
   res.json(results);
 });
