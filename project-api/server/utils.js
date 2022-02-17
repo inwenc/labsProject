@@ -1,3 +1,5 @@
+const path = require("path");
+const fs = require("fs").promises;
 /*
 
 
@@ -78,3 +80,122 @@ results.forEach(obj => {
 
 
 */
+// ['2022-02-10 01:47:59', '2022-02-10 01:47:59']
+function calculateTimes(start, end, listOfResults) {
+  //create date format
+  let timeStart = new Date(start).getTime();
+  let timeEnd = new Date(end).getTime();
+
+  let hourDiff = timeEnd - timeStart;
+
+  let secInTotal = hourDiff / 1000;
+  let min = Math.round(secInTotal / 60);
+  const sec = secInTotal % 60;
+  listOfResults.push(`${min} ${sec}`);
+}
+// calculates metrics between checkpoint to checkpoint
+function getMetrics(listOfTimes) {
+  console.log("listOfTime", listOfTimes);
+  const listOfResults = [];
+  for (let i = 1; i < listOfTimes.length; i++) {
+    calculateTimes(listOfTimes[i - 1], listOfTimes[i], listOfResults);
+  }
+  return listOfResults; // ['63 0']
+}
+function toFixedTrunc(x, n) {
+  const v = (typeof x === "string" ? x : x.toString()).split(".");
+  if (n <= 0) return v[0];
+  let f = v[1] || "";
+  if (f.length > n) return `${v[0]}.${f.substr(0, n)}`;
+  while (f.length < n) f += "0";
+  return `${v[0]}.${f}`;
+}
+
+function formatCheckpoints(checkpointsList) {
+  let results = [];
+
+  checkpointsList[0].checkpoints.forEach((coord) =>
+    results.push(JSON.parse(coord.replace(/\n/g, "")))
+  );
+
+  results.forEach((obj) => {
+    obj["lat"] = toFixedTrunc(Number(obj["lat"]), 4);
+    obj["lng"] = toFixedTrunc(Number(obj["lng"]), 4);
+  });
+
+  return results;
+  /*
+[
+  { lat: '9.9302', lng: '-84.0949' },
+  { lat: '9.9294', lng: '-84.0918' }
+]
+  */
+}
+
+function getListOfTimes(
+  listOfDataFromGPS,
+  checkpoints,
+  idxFromCheckpointList,
+  listOfTimes
+) {
+  if (idxFromCheckpointList > checkpoints.length) {
+    return;
+  }
+  listOfDataFromGPS.forEach((eachSet) => {
+    if (
+      eachSet["lat"] === checkpoints[idxFromCheckpointList]["lat"] &&
+      eachSet["lon"] === checkpoints[idxFromCheckpointList]["lng"]
+    ) {
+      listOfTimes.push(eachSet["time"]);
+      idxFromCheckpointList += 1;
+    }
+  });
+}
+
+function compareCheckpointsAndDataFromGPS(listOfDataFromGPS, checkpoints) {
+  const listOfTimes = [];
+  let checkpointIndex = 0;
+  // always add the start time
+  listOfTimes.push(listOfDataFromGPS[0]["time"]);
+  getListOfTimes(listOfDataFromGPS, checkpoints, checkpointIndex, listOfTimes);
+  console.log("list", listOfTimes);
+  return listOfTimes;
+}
+
+function formatListOfDataFromGPS(listOfDataFromGPS) {
+  const results = [];
+  const arrFormat = listOfDataFromGPS.split("\n");
+  arrFormat.forEach((unit) => {
+    let lineArr = unit.split(", ");
+    let formatObject = {
+      lat: toFixedTrunc(lineArr[0], 4),
+      lon: toFixedTrunc(lineArr[1], 4),
+      time: lineArr[2],
+    };
+    results.push(formatObject);
+  });
+  return results;
+  /*
+[
+  { lat: '9.9334', lon: '-84.1334', time: '2022-02-10 01:47:59' },
+  { lat: '9.9334', lon: '-84.1334', time: '2022-02-10 01:47:59' },
+  { lat: '9.9334', lon: '-84.1334', time: '2022-02-10 01:47:59' },
+  { lat: '9.9334', lon: '-84.1334', time: '2022-02-10 01:47:59' },
+  { lat: '9.9334', lon: '-84.1334', time: '2022-02-10 01:47:59' },
+  { lat: '9.9334', lon: '-84.1334', time: '2022-02-10 01:47:59' }
+]
+
+  */
+}
+
+async function loadGpsCoordinates() {
+  const data = await fs.readFile(path.resolve(__dirname, "gps.txt"), "utf8");
+  return data;
+}
+
+module.exports = {
+  loadGpsCoordinates,
+  formatCheckpoints,
+  formatListOfDataFromGPS,
+  compareCheckpointsAndDataFromGPS,
+};
