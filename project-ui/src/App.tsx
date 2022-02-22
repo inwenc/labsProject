@@ -17,6 +17,8 @@ const App: React.VFC = () => {
     lng: 0,
   });
   const [checkpoints, setCheckpoints] = React.useState<string[]>([]);
+  const [metrics, setMetrics] = React.useState<string[]>([]);
+  const [showMetrics, setShowMetrics] = React.useState<boolean>(false);
 
   const onClick = (e: google.maps.MapMouseEvent) => {
     setClicks([...clicks, e.latLng!]);
@@ -66,6 +68,9 @@ const App: React.VFC = () => {
       })
       .then((parsedData) => {
         console.log("parsed", parsedData);
+        // alert(parsedData);
+        setMetrics(parsedData);
+        setShowMetrics(true);
       })
       .catch((err) => console.log(err));
   };
@@ -74,6 +79,10 @@ const App: React.VFC = () => {
     setZoom(m.getZoom()!);
     setCenter(m.getCenter()!.toJSON());
   };
+
+  // const formatMetrics: any = (arrOfMetrics) => {
+  //   //map the results
+  // };
 
   const form = (
     <div className="map-container__form">
@@ -145,6 +154,20 @@ const App: React.VFC = () => {
       </Wrapper>
       {/* Basic form for controlling center and zoom of map. */}
       {form}
+      <div>
+        {showMetrics && (
+          <div>
+            Start:
+            {metrics.map((time, i) => (
+              <li>
+                Checkpoint <span>{i + 1}</span>
+                {`:'  ${time}'`}
+              </li>
+            ))}
+            <button onClick={() => setShowMetrics(false)}>close</button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
