@@ -19,10 +19,8 @@ Get your running time metrics using custom pinned checkpoint on Google Map.
 
 ### Set checkpoints on UI
 
-![Alt Text](https://media.giphy.com/media/jGYA8VZrL3cGNFBWrQ/giphy.gif)
+![Alt Text](https://media.giphy.com/media/fOUrTir22JbBL4rCC4/giphy.gif)
 
 ### Retreat time metrics after running
 
-![Alt Text](https://giphy.com/embed/fOUrTir22JbBL4rCC4/giphy.gif)
-
-###
+![Alt Text](https://media.giphy.com/media/jGYA8VZrL3cGNFBWrQ/giphy.gif)
