@@ -21,6 +21,10 @@ Get your running time metrics using custom pinned checkpoint on Google Map.
 
 ![Alt Text](https://media.giphy.com/media/fOUrTir22JbBL4rCC4/giphy.gif)
 
+### Press button to start and press button to stop
+
+![Alt Text](running_device.jpeg)
+
 ### Retreat time metrics after running
 
 ![Alt Text](https://media.giphy.com/media/jGYA8VZrL3cGNFBWrQ/giphy.gif)
