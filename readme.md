@@ -17,14 +17,24 @@ Get your running time metrics using custom pinned checkpoint on Google Map.
 
 ## Usage
 
-### Set checkpoints on UI
+Add your own Google API key in `/project-ui/src/app.tsx`
+
+````<Wrapper
+        apiKey={`${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`}
+        render={render}
+      >
+      ```
+
+
+- Set checkpoints on UI
 
 ![Alt Text](https://media.giphy.com/media/fOUrTir22JbBL4rCC4/giphy.gif)
 
-### Press button to start and press button to stop
+- Press button to start and press button to stop
 
 ![Alt Text](running_device.jpeg)
 
-### Retreat time metrics after running
+- Retreat time metrics after running
 
 ![Alt Text](https://media.giphy.com/media/jGYA8VZrL3cGNFBWrQ/giphy.gif)
+````
