@@ -23,7 +23,7 @@ Add your own Google API key in `/project-ui/src/app.tsx`
 <Wrapper
         apiKey={`${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`}
         render={render}
-      >`
+      >
 ```
 
 - Set checkpoints on UI
