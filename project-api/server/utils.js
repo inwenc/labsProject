@@ -19,7 +19,6 @@ function calculateTimes(start, end, listOfResults) {
 
   let secInTotal = hourDiff / 1000;
   let minInTotal = Math.round(secInTotal / 60);
-  console.log("minInTotal", minInTotal);
   if (minInTotal > 60) {
     hr = Math.round(minInTotal / 60);
     min = minInTotal % 60;
@@ -37,10 +36,18 @@ function calculateTimes(start, end, listOfResults) {
  */
 
 function getMetrics(listOfTimes) {
+  console.log("listOfTimes", listOfTimes);
   const listOfResults = [];
   for (let i = 1; i < listOfTimes.length; i++) {
     calculateTimes(listOfTimes[i - 1], listOfTimes[i], listOfResults);
   }
+  // Calculate total time from press of start button to stop
+  calculateTimes(
+    listOfTimes[0],
+    listOfTimes[listOfTimes.length - 1],
+    listOfResults
+  );
+
   return listOfResults; // eg. ['0hr 6min 3sec', '7min 10sec, 6min, 2sec]
 }
 /*
@@ -72,13 +79,13 @@ function toFixedTrunc(x, n) {
 function formatCheckpoints(checkpointsList) {
   let results = [];
 
-  checkpointsList[0].checkpoints.forEach((coord) =>
+  checkpointsList[checkpointsList.length - 1].checkpoints.forEach((coord) =>
     results.push(JSON.parse(coord.replace(/\n/g, "")))
   );
 
   results.forEach((obj) => {
     obj["lat"] = toFixedTrunc(Number(obj["lat"]), 4);
-    obj["lng"] = toFixedTrunc(Number(obj["lng"]), 4);
+    obj["lng"] = toFixedTrunc(Number(obj["lng"]), 5);
   });
 
   return results;
@@ -128,8 +135,9 @@ function compareCheckpointsAndDataFromGPS(listOfDataFromGPS, checkpoints) {
   let checkpointIndex = 0;
   // always add the start time from first row
   listOfTimes.push(listOfDataFromGPS[0]["time"]);
+  // always add the stop time
+  listOfTimes.push(listOfDataFromGPS[listOfDataFromGPS.length - 1]["time"]);
   getListOfTimes(listOfDataFromGPS, checkpoints, checkpointIndex, listOfTimes);
-  console.log("list", listOfTimes);
   return listOfTimes;
 }
 /*
@@ -154,7 +162,7 @@ function formatListOfDataFromGPS(listOfDataFromGPS) {
     let lineArr = unit.split(", ");
     let formatObject = {
       lat: toFixedTrunc(lineArr[0], 4),
-      lon: toFixedTrunc(lineArr[1], 4),
+      lon: toFixedTrunc(lineArr[1], 5),
       time: lineArr[2],
     };
     results.push(formatObject);

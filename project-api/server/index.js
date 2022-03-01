@@ -38,7 +38,7 @@ app.post("/postCheckpoints", async (req, res) => {
 
 app.get("/getCheckpoints", async (req, res) => {
   const data = await loadGpsCoordinates();
-  //console.log("data", data);
+
   const results = await Checkpoints.find({});
 
   const formatFromText = formatListOfDataFromGPS(data);
@@ -48,8 +48,9 @@ app.get("/getCheckpoints", async (req, res) => {
     formatFromText,
     formattedCheckpoints
   );
-  // console.log("format", listOfTimes);
-  const sampleResponse = ["6min 3sec", "7min 10sec", "6min 2sec"];
+  const metrics = getMetrics(listOfTimes);
+
+  const sampleResponse = ["0hr 6min 3sec", "0hr 7min 10sec", "0hr 6min 2sec"];
   res.json(sampleResponse);
 });
 

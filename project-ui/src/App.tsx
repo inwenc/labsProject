@@ -129,6 +129,21 @@ const App: React.VFC = () => {
         SUBMIT
       </button>
       <button onClick={() => getMetrics()}>Get Metrics</button>
+      <div className="metrics-container">
+        {showMetrics && (
+          <div>
+            Start:
+            {metrics.map((time, i) => (
+              <li>
+                Checkpoint <span>{i + 1}</span>
+                {`:  ${time}`}
+              </li>
+            ))}
+            <ul>Total Time: {metrics[metrics.length - 1]}</ul>
+            <button onClick={() => setShowMetrics(false)}>close</button>
+          </div>
+        )}
+      </div>
     </div>
   );
 
@@ -154,20 +169,6 @@ const App: React.VFC = () => {
       </Wrapper>
       {/* Basic form for controlling center and zoom of map. */}
       {form}
-      <div>
-        {showMetrics && (
-          <div>
-            Start:
-            {metrics.map((time, i) => (
-              <li>
-                Checkpoint <span>{i + 1}</span>
-                {`:'  ${time}'`}
-              </li>
-            ))}
-            <button onClick={() => setShowMetrics(false)}>close</button>
-          </div>
-        )}
-      </div>
     </div>
   );
 };
